@@ -24,8 +24,13 @@ function toLatLngLiteral(
 }
 
 async function createStreetViewService(): Promise<google.maps.StreetViewService> {
-	await loadStreetViewLibrary();
-	return new google.maps.StreetViewService();
+	const { StreetViewService } = await loadStreetViewLibrary();
+	return new StreetViewService();
+}
+
+async function getStreetViewSource(): Promise<typeof google.maps.StreetViewSource> {
+	const { StreetViewSource } = await loadStreetViewLibrary();
+	return StreetViewSource;
 }
 
 export async function findPanoramaNear(
@@ -33,11 +38,12 @@ export async function findPanoramaNear(
 	radiusMeters = STREET_VIEW_SEARCH_RADIUS_METERS,
 ): Promise<PanoramaLookupResult | null> {
 	const service = await createStreetViewService();
+	const StreetViewSource = await getStreetViewSource();
 
 	const outdoorRequest: google.maps.StreetViewLocationRequest = {
 		location,
 		radius: radiusMeters,
-		source: google.maps.StreetViewSource.OUTDOOR,
+		source: StreetViewSource.OUTDOOR,
 	};
 
 	try {
@@ -52,7 +58,7 @@ export async function findPanoramaNear(
 	const defaultRequest: google.maps.StreetViewLocationRequest = {
 		location,
 		radius: radiusMeters,
-		source: google.maps.StreetViewSource.DEFAULT,
+		source: StreetViewSource.DEFAULT,
 	};
 
 	try {
@@ -163,11 +169,13 @@ export function findBestForwardLink(
 	return bestDiff <= maxAngleDegrees ? bestLink : null;
 }
 
-export function createStreetViewPanorama(
+export async function createStreetViewPanorama(
 	container: HTMLElement,
 	options: google.maps.StreetViewPanoramaOptions,
-): google.maps.StreetViewPanorama {
-	return new google.maps.StreetViewPanorama(container, {
+): Promise<google.maps.StreetViewPanorama> {
+	const { StreetViewPanorama } = await loadStreetViewLibrary();
+
+	return new StreetViewPanorama(container, {
 		...options,
 		// Keep Google's attribution and navigation controls for Maps Platform compliance.
 		addressControl: true,

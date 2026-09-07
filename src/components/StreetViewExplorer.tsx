@@ -75,7 +75,7 @@ export function StreetViewExplorer() {
 				setLoadState({
 					status: 'error',
 					message:
-						'Set VITE_GOOGLE_MAPS_API_KEY in .env.local to load Street View.',
+						'Missing API key. Add VITE_GOOGLE_MAPS_API_KEY to .env.local (local) or GitHub Actions secrets (Pages).',
 				});
 			}
 			return;
@@ -88,7 +88,7 @@ export function StreetViewExplorer() {
 			setLoadState({ status: 'loading' });
 
 			try {
-				const panorama = createStreetViewPanorama(containerRef.current!, {
+				const panorama = await createStreetViewPanorama(containerRef.current!, {
 					position: DEFAULT_LOCATION,
 					pov: { heading: 0, pitch: 0 },
 					visible: true,
