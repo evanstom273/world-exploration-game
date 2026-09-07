@@ -35,6 +35,23 @@ npm run dev
 npm run build
 ```
 
+## GitHub Pages
+
+The site deploys automatically to GitHub Pages when changes land on `main`.
+
+**Live URL:** https://evanstom273.github.io/world-exploration-game/
+
+### One-time setup
+
+1. In the repo **Settings → Secrets and variables → Actions**, add:
+   - `VITE_GOOGLE_MAPS_API_KEY` — your Google Maps API key
+2. In **Settings → Pages**, set **Source** to **GitHub Actions** (if not already).
+3. Restrict your API key's HTTP referrers to include:
+   - `https://evanstom273.github.io/*`
+   - `http://localhost:*` (for local development)
+
+You can also trigger a deploy manually from the **Actions** tab via **Deploy to GitHub Pages → Run workflow**.
+
 ## Controls
 
 | Input | Action |
